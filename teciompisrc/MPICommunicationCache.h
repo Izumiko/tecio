@@ -1,9 +1,9 @@
  #pragma once
 #include "ThirdPartyHeadersBegin.h"
-#include <boost/scoped_ptr.hpp>
 #include <mpi.h>
 #include <stdexcept>
 #include <string>
+#include <boost/scoped_ptr.hpp>
 #include "ThirdPartyHeadersEnd.h"
 #include "SimpleVector.h"
 #include "StandardIntegralTypes.h"

@@ -1,23 +1,23 @@
-#include "stdafx.h"
 #include "MASTER.h"
 #include "GLOBAL.h"
-#include "CodeContract.h"
-#include "UnicodeStringUtils.h"
+#include "stdafx.h"
 #include "ThirdPartyHeadersBegin.h"
 #include <string>
 #include "ThirdPartyHeadersEnd.h"
-using std::string; using std::wstring; namespace tecplot { static inline string* createUtf8StringTranslation(string const& str) { string *___3359 = new string(str); ENSURE(VALID_REF(___3359)); return ___3359; }
+#include "CodeContract.h"
+#include "UnicodeStringUtils.h"
+using std::string; using std::wstring; namespace tecplot { static inline string* createUtf8StringTranslation(string const& str) { string* ___3359 = new string(str); ENSURE(VALID_REF(___3359)); return ___3359; }
  #if defined MSWIN
-static inline wstring* createWideStringTranslation(string const& str) { wstring *___3359 = new wstring; *___3359 = utf8ToWideString(str.c_str()); ENSURE(VALID_REF(___3359)); return ___3359; }
+static inline wstring* createWideStringTranslation(string const& str) { wstring* ___3359 = new wstring; *___3359         = utf8ToWideString(str.c_str()); ENSURE(VALID_REF(___3359)); return ___3359; }
  #endif
  #if defined MSWIN
-static inline wstring* createWideString(___4219::___2506 ___2505, string const&          str) { REQUIRE(___2505 == ___4219::___1102 || ___2505 == ___4219::___1096); wstring* ___3359; if (___2505 == ___4219::___1102) ___3359 = createWideStringTranslation(str); else ___3359 = new wstring(utf8ToWideString(str.c_str())); return ___3359; }
+static inline wstring* createWideString(___4219::___2506 ___2505, string const& str) { REQUIRE(___2505 == ___4219::___1102 || ___2505 == ___4219::___1096); wstring* ___3359; if (___2505 == ___4219::___1102) ___3359 = createWideStringTranslation(str); else ___3359 = new wstring(utf8ToWideString(str.c_str())); return ___3359; }
  #endif
-void ___4219::___1931(___4219::___2506 ___2505, char const*            str, char const*            ASSERT_ONLY(___4220)) { REQUIRE(___2505 == ___1102 || ___2505 == ___1096); REQUIRE(VALID_REF_OR_NULL(str)); REQUIRE(VALID_REF_OR_NULL(___4220)); ___2494   = ___2505; ___2488 = (str == NULL); if (!___2488) ___2624 = str; ___2667 = NULL;
+void ___4219::___1931(___4219::___2506 ___2505, char const* str, char const* ASSERT_ONLY(___4220)) { REQUIRE(___2505 == ___1102 || ___2505 == ___1096); REQUIRE(VALID_REF_OR_NULL(str)); REQUIRE(VALID_REF_OR_NULL(___4220)); ___2494   = ___2505; ___2488 = (str == NULL); if (!___2488) ___2624 = str; ___2667 = NULL;
  #if defined MSWIN
 ___2676 = NULL;
  #endif
-} ___4219::___4219() { ___1931(___1096, NULL, NULL); ENSURE(this->___2066()); } ___4219 ___4219::___2766() { return ___1095(NULL); } ___4219::___4219(___4219::___2506 ___2505, char const*            str, char const*            ___4220) { REQUIRE(___2505 == ___1102 || ___2505 == ___1096); REQUIRE(VALID_REF_OR_NULL(str)); REQUIRE(VALID_REF_OR_NULL(___4220)); ___1931(___2505, str, ___4220); ENSURE(this->___2066()); } ___4219::~___4219() { delete ___2667;
+} ___4219::___4219() { ___1931(___1096, NULL, NULL); ENSURE(this->___2066()); } ___4219 ___4219::___2766() { return ___1095(NULL); } ___4219::___4219(___4219::___2506 ___2505, char const* str, char const* ___4220) { REQUIRE(___2505 == ___1102 || ___2505 == ___1096); REQUIRE(VALID_REF_OR_NULL(str)); REQUIRE(VALID_REF_OR_NULL(___4220)); ___1931(___2505, str, ___4220); ENSURE(this->___2066()); } ___4219::~___4219() { delete ___2667;
  #if defined MSWIN
 delete ___2676;
  #endif
@@ -37,7 +37,7 @@ ___4219::operator string() { INVARIANT(this->___2066()); REQUIRE(!___2034()); st
  #if defined MSWIN && !defined MAKEARCHIVE
 ___4219::operator wstring() { INVARIANT(this->___2066()); REQUIRE(!___2034()); if (___2676 == NULL) ___2676 = createWideString(___2494, ___2624); return *___2676; }
  #endif
-___4219& ___4219::operator=(___4219 const& ___2889) { REQUIRE(___2889.___2066()); if (this != &___2889) { ___2494       = ___2889.___2494; ___2488     = ___2889.___2488; ___2624     = ___2889.___2624; delete ___2667; ___2667 = (___2889.___2667 != NULL ? new string(*___2889.___2667) : NULL);
+___4219& ___4219::operator=(___4219 const& ___2889) { REQUIRE(___2889.___2066()); if (this != &___2889) { ___2494   = ___2889.___2494; ___2488 = ___2889.___2488; ___2624 = ___2889.___2624; delete ___2667; ___2667 = (___2889.___2667 != NULL ? new string(*___2889.___2667) : NULL);
  #if defined MSWIN
 delete ___2676; ___2676 = (___2889.___2676 != NULL ? new wstring(*___2889.___2676) : NULL);
  #endif

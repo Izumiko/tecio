@@ -1,6 +1,6 @@
 # Set to appropriate C++ compilers
            CPP=g++
-        MPICPP=mpic++
+        MPICPP=mpicxx
       # add flag -O3 for optimized builds, or -g for debug builds
       CPPFLAGS=-std=c++14
 

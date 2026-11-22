@@ -3,11 +3,11 @@
  #if defined _WIN32
 #include <windows.h>
  #else
-#include <thread>
 #include <mutex>
+#include <thread>
  #if defined __APPLE__
-#include <sys/types.h>
 #include <sys/sysctl.h>
+#include <sys/types.h>
  #endif
  #endif
 #include "ThirdPartyHeadersEnd.h"

@@ -1,30 +1,30 @@
  #if defined(_MSC_VER)
- #pragma warning (push, 0)
- #pragma warning (disable:4191)
- #pragma warning (disable:4242)
- #pragma warning (disable:4263)
- #pragma warning (disable:4264)
- #pragma warning (disable:4265)
- #pragma warning (disable:4266)
- #pragma warning (disable:4302)
- #pragma warning (disable:4701)
- #pragma warning (disable:4702)
- #pragma warning (disable:4715)
- #pragma warning (disable:4789)
- #pragma warning (disable:4905)
- #pragma warning (disable:4906)
- #pragma warning (disable:4928)
+ #pragma warning(push, 0)
+ #pragma warning(disable : 4191)
+ #pragma warning(disable : 4242)
+ #pragma warning(disable : 4263)
+ #pragma warning(disable : 4264)
+ #pragma warning(disable : 4265)
+ #pragma warning(disable : 4266)
+ #pragma warning(disable : 4302)
+ #pragma warning(disable : 4701)
+ #pragma warning(disable : 4702)
+ #pragma warning(disable : 4715)
+ #pragma warning(disable : 4789)
+ #pragma warning(disable : 4905)
+ #pragma warning(disable : 4906)
+ #pragma warning(disable : 4928)
  #if (_MSC_VER > 1600)
 #include <codeanalysis\warnings.h>
- #pragma warning (push)
- #pragma warning (disable : ALL_CODE_ANALYSIS_WARNINGS)
+ #pragma warning(push)
+ #pragma warning(disable : ALL_CODE_ANALYSIS_WARNINGS)
  #endif
  #elif defined(__clang__)
  #pragma clang diagnostic push
  #pragma clang diagnostic ignored "-Wall"
  #pragma clang diagnostic ignored "-Wextra"
  #elif defined(__GNUC__)
- #if ((__GNUC__  >= 4) && (__GNUC_MINOR__ >= 6)) || (__GNUC__ >= 5) 
+ #if ((__GNUC__ >= 4) && (__GNUC_MINOR__ >= 6)) || (__GNUC__ >= 5) 
  #pragma GCC diagnostic push
  #pragma GCC diagnostic ignored "-Wall"
  #pragma GCC diagnostic ignored "-Wextra"

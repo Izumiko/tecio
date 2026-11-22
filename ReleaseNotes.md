@@ -10,6 +10,14 @@
 
 # Bug Fixes
 
+## v2026r1
+
+* Fixed TecIO writing of user-defined face neighbors for 2D zones in
+  .szplt files.
+
+* Fixed a TecIO-MPI hang encountered when only the final two ranks
+  owned zone partitions.
+
 ## v2025r1
 
 * Fixed a TecIO-MPI crash encountered when a partitioned FEMixed zone

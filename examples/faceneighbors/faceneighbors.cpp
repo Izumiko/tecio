@@ -7,6 +7,9 @@
 #include "TECIO.h"
 #include "MASTER.h"
 
+// Uncomment the following line to use the old TECXXX routines:
+//#define OLD_API
+
 int main()
 {
     /* Initialize the Data File using TECINI.  TECINI is required
@@ -17,12 +20,14 @@ int main()
 
     /* DOCSTART:faceneighbors_tecini.txt*/
 
+    INTEGER4 I = 0;  /* Used to track return codes */
+    void* outputFileHandle = NULL;
+
+    #if defined OLD_API
     INTEGER4 Debug      = 1;
     INTEGER4 VIsDouble  = 0;
-    INTEGER4 FileType   = 0;
-    INTEGER4 FileFormat = 0; // 0 == PLT, 1 == SZPLT
-    INTEGER4 I          = 0;  /* Used to track return codes */
-
+    INTEGER4 FileType   = FILETYPE_FULL;
+    INTEGER4 FileFormat = FILEFORMAT_SZL;
     I = TECINI142((char*)"Face Neighbors Example", /* Specifies the name
                                                     * of the entire
                                                     * dataset
@@ -40,7 +45,7 @@ int main()
                                                     * Var 1.)
                                                     */
 
-                  (char*)"FaceNeighbors.plt",      /* Specifies the
+                  (char*)"FaceNeighbors.szplt",    /* Specifies the
                                                     * file name.
                                                     */
                   (char*)".",
@@ -53,6 +58,18 @@ int main()
                                                     */
                   &Debug,
                   &VIsDouble);
+    #else
+    I = tecFileWriterOpen("FaceNeighbors.szplt",
+                          "Face Neighbors Example",
+                          "X Y P",
+                          FILEFORMAT_SZL,
+                          FILETYPE_FULL,
+                          FieldDataType_Float,
+                          NULL,
+                          &outputFileHandle);
+    if (I == 0)
+        I = tecFileSetDiagnosticsLevel(outputFileHandle, 1);
+    #endif
     /* DOCEND */
 
     /* After TECINI is called, call TECZNE to create one or
@@ -126,6 +143,8 @@ int main()
                                          * purposes.
                                          */
 
+    int32_t Zone1 = 0;
+    #if defined OLD_API
     I = TECZNE142((char*)"Zone 1",
                   &ZoneType,
                   &NumPts,
@@ -147,6 +166,24 @@ int main()
                   ValueLocation,
                   NULL,
                   &ShrConn);
+    Zone1 = 1;
+    #else
+    I = tecZoneCreateFE(outputFileHandle,
+                        "Zone 1",
+                        ZONETYPE_FEQUADRILATERAL,
+                        NumPts,
+                        NumElems,
+                        NULL,
+                        NULL,
+                        ValueLocation,
+                        NULL,
+                        ShrConn,
+                        NFConns,
+                        FNMode,
+                        &Zone1);
+    if (I == 0)
+        I = tecZoneSetUnsteadyOptions(outputFileHandle, Zone1, SolTime, StrandID);
+    #endif
     /* DOCEND */
 
     /* Set up the variable values.  The variable values will be
@@ -199,10 +236,16 @@ int main()
                              * variables in float format.
                              */
 
-    /* Call TECDAT once for each variable */
-    I   = TECDAT142(&NumPts, &X[0], &DIsDouble);
-    I   = TECDAT142(&NumPts, &Y[0], &DIsDouble);
-    I   = TECDAT142(&NumPts, &P[0], &DIsDouble);
+    /* Write each variable */
+    #if defined OLD_API
+    I = TECDAT142(&NumPts, &X[0], &DIsDouble);
+    I = TECDAT142(&NumPts, &Y[0], &DIsDouble);
+    I = TECDAT142(&NumPts, &P[0], &DIsDouble);
+    #else
+    I = tecZoneVarWriteFloatValues(outputFileHandle, Zone1, 1, 0, NumPts, X);
+    I = tecZoneVarWriteFloatValues(outputFileHandle, Zone1, 2, 0, NumPts, Y);
+    I = tecZoneVarWriteFloatValues(outputFileHandle, Zone1, 3, 0, NumPts, P);
+    #endif
     /* DOCEND */
 
     /*  Define the face neighbors connections.
@@ -222,7 +265,11 @@ int main()
     INTEGER4 ConnList[8] = {1, 3, 4, 2,
                             3, 5, 6, 4
                            };
-    I   = TECNOD142(ConnList);
+    #if defined OLD_API
+    I = TECNOD142(ConnList);
+    #else
+    I = tecZoneNodeMapWrite32(outputFileHandle, Zone1, 0, 1, 8, ConnList);
+    #endif
     /* DOCEND */
 
     /*  TIP! It is important to provide the node list in either a
@@ -264,7 +311,11 @@ int main()
 
     /* DOCSTART:faceneighbors_tecface1.txt*/
     INTEGER4 FaceConn[4] = {2, 2, 2, 1};
-    I   = TECFACE142(FaceConn);
+    #if defined OLD_API
+    I = TECFACE142(FaceConn);
+    #else
+    I = tecZoneFaceNbrWriteConnections32(outputFileHandle, Zone1, FaceConn);
+    #endif
     /* DOCEND */
 
     /* The creation of Zone 1 is complete.  We are ready to create
@@ -274,6 +325,8 @@ int main()
      */
     /* DOCSTART:faceneighbors_teczne2.txt*/
     /* Call TECZNE to create Zone 2 */
+    int32_t Zone2 = 0;
+    #if defined OLD_API
     I = TECZNE142((char*)"Zone 2",
                   &ZoneType,
                   &NumPts,
@@ -295,6 +348,24 @@ int main()
                   ValueLocation,
                   NULL,
                   &ShrConn);
+    Zone2 = 2;
+    #else
+    I = tecZoneCreateFE(outputFileHandle,
+                        "Zone 2",
+                        ZONETYPE_FEQUADRILATERAL,
+                        NumPts,
+                        NumElems,
+                        NULL,
+                        NULL,
+                        ValueLocation,
+                        NULL,
+                        ShrConn,
+                        NFConns,
+                        FNMode,
+                        &Zone2);
+    if (I == 0)
+        I = tecZoneSetUnsteadyOptions(outputFileHandle, Zone2, SolTime, StrandID);
+    #endif
     /* DOCEND */
 
     /* Define the variables for Zone 2.  Because Zone 2 is a copy
@@ -313,9 +384,15 @@ int main()
         P2[ii] = 2 * (float)ii;
     }
 
-    I   = TECDAT142(&NumPts, &X2[0], &DIsDouble);
-    I   = TECDAT142(&NumPts, &Y[0], &DIsDouble);
-    I   = TECDAT142(&NumPts, &P2[0], &DIsDouble);
+    #if defined OLD_API
+    I = TECDAT142(&NumPts, &X2[0], &DIsDouble);
+    I = TECDAT142(&NumPts, &Y[0], &DIsDouble);
+    I = TECDAT142(&NumPts, &P2[0], &DIsDouble);
+    #else
+    I = tecZoneVarWriteFloatValues(outputFileHandle, Zone2, 1, 0, NumPts, X2);
+    I = tecZoneVarWriteFloatValues(outputFileHandle, Zone2, 2, 0, NumPts, Y);
+    I = tecZoneVarWriteFloatValues(outputFileHandle, Zone2, 3, 0, NumPts, P2);
+    #endif
 
     delete[] X;
     delete[] Y;
@@ -331,7 +408,11 @@ int main()
      */
 
     /* DOCSTART:faceneighbors_tecnod2.txt*/
-    I   = TECNOD142(ConnList);
+    #if defined OLD_API
+    I = TECNOD142(ConnList);
+    #else
+    I = tecZoneNodeMapWrite32(outputFileHandle, Zone2, 0, 1, 8, ConnList);
+    #endif
     /* DOCEND */
 
     /* We will now specify the face neighbor connection with
@@ -344,13 +425,21 @@ int main()
                                        * neighbor to cell 2 in
                                        * zone 1.
                                        */
-    I   = TECFACE142(FaceConn2);
+    #if defined OLD_API
+    I = TECFACE142(FaceConn2);
+    #else
+    I = tecZoneFaceNbrWriteConnections32(outputFileHandle, Zone2, FaceConn2);
+    #endif
     /* DOCEND */
 
     /* Call TECEND to close the file */
     /* DOCSTART:faceneighbors_tecend.txt*/
+    #if defined OLD_API
     I = TECEND142();
+    #else
+    I = tecFileWriterClose(&outputFileHandle);
+    #endif
     /* DOCEND */
 
-    return 0;
+    return I;
 }

@@ -18,9 +18,9 @@ virtual ___4219& operator=(___4219 const& ___2889); ___4219(___4219 const& ___28
  #if !defined NO_ASSERTS
 virtual bool ___2066() const;
  #endif 
-private: ___4219(___4219::___2506 ___2505, char const*            str, char const*            ___4220); void ___1931(___4219::___2506 ___2505, char const*            str, char const*            ___4220); ___4219::___2506  ___2494; bool                    ___2488; std::string             ___2624; mutable std::string*    ___2667;
+private: ___4219(___4219::___2506 ___2505, char const* str, char const* ___4220); void ___1931(___4219::___2506 ___2505, char const* str, char const* ___4220); ___4219::___2506 ___2494; bool                   ___2488; std::string            ___2624; mutable std::string*   ___2667;
  #if defined MSWIN
-mutable std::wstring*   ___2676;
+mutable std::wstring* ___2676;
  #endif
 }; inline ___4219 ___4218(char const* str, char const* ___4220 = NULL) { return ___4219::___4218(str, ___4220); } inline ___4219 ___1095(char const* str) { return ___4219::___1095(str); } inline ___4219 ___1095(std::string const& str) { return ___4219::___1095(str.c_str()); } }
  #endif
